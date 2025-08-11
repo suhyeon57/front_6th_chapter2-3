@@ -4,9 +4,9 @@ import {
   SelectValue,
   SelectContent,
   SelectItem,
-  Button,
 } from '../../components'
 import { PaginationProps } from '../model/types'
+import { Button } from '@/shared'
 
 export const Pagination = ({
   total,

@@ -9,7 +9,6 @@ import {
 } from 'lucide-react'
 import { useLocation, useNavigate } from 'react-router-dom'
 import {
-  Button,
   Card,
   CardContent,
   CardHeader,
@@ -28,7 +27,7 @@ import {
   Textarea,
 } from '../components'
 import { SearchFilterBar } from '@/widgets/search-filter-bar'
-import { Pagination } from '@/shared'
+import { Pagination, Button } from '@/shared/'
 
 const PostsManager = () => {
   const navigate = useNavigate()

@@ -1,13 +1,13 @@
 import { Search } from 'lucide-react'
+import { SearchFilterBarProps } from '../model/types'
 import {
+  Input,
   Select,
   SelectContent,
   SelectItem,
   SelectTrigger,
   SelectValue,
-} from '../../../components'
-import { SearchFilterBarProps } from '../model/types'
-import { Input } from '@/shared'
+} from '@/shared/ui'
 
 export const SearchFilterBar = ({
   searchQuery,

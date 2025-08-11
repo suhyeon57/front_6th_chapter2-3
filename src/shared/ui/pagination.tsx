@@ -1,12 +1,12 @@
+import { PaginationProps } from '../model/types'
 import {
+  Button,
   Select,
   SelectTrigger,
   SelectValue,
   SelectContent,
   SelectItem,
-} from '../../components'
-import { PaginationProps } from '../model/types'
-import { Button } from '@/shared'
+} from '@/shared/ui'
 
 export const Pagination = ({
   total,

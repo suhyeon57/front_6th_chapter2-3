@@ -9,28 +9,28 @@ import {
 } from 'lucide-react'
 import { useLocation, useNavigate } from 'react-router-dom'
 import {
-  Dialog,
-  DialogContent,
-  DialogHeader,
-  DialogTitle,
   Table,
   TableBody,
   TableCell,
   TableHead,
   TableHeader,
   TableRow,
-  Textarea,
 } from '../components'
 import { SearchFilterBar } from '@/widgets/search-filter-bar'
 import {
   Pagination,
   Button,
   Input,
+  Textarea,
   Card,
   CardContent,
   CardHeader,
   CardTitle,
-} from '@/shared/'
+  Dialog,
+  DialogContent,
+  DialogHeader,
+  DialogTitle,
+} from '@/shared/ui'
 
 const PostsManager = () => {
   const navigate = useNavigate()

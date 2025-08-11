@@ -1,6 +1,5 @@
 import { Search } from 'lucide-react'
 import {
-  Input,
   Select,
   SelectContent,
   SelectItem,
@@ -8,6 +7,7 @@ import {
   SelectValue,
 } from '../../../components'
 import { SearchFilterBarProps } from '../model/types'
+import { Input } from '@/shared'
 
 export const SearchFilterBar = ({
   searchQuery,

@@ -30,7 +30,13 @@ import {
   TableRow,
 } from '@/shared/ui'
 
-import { useLikeComment, useDeleteComment } from '@/features/comment/'
+import {
+  useLikeComment,
+  useDeleteComment,
+  useAddComment,
+} from '@/features/comment/'
+
+import { NewComment } from '@/entities/comment/model/types'
 
 const PostsManager = () => {
   const navigate = useNavigate()
@@ -58,7 +64,7 @@ const PostsManager = () => {
   const [selectedTag, setSelectedTag] = useState(queryParams.get('tag') || '')
   const [comments, setComments] = useState({})
   const [selectedComment, setSelectedComment] = useState(null)
-  const [newComment, setNewComment] = useState({
+  const [newComment, setNewComment] = useState<NewComment>({
     body: '',
     postId: null,
     userId: 1,
@@ -226,24 +232,30 @@ const PostsManager = () => {
   }
 
   // 댓글 추가
-  const addComment = async () => {
-    try {
-      const response = await fetch('/api/comments/add', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify(newComment),
-      })
-      const data = await response.json()
-      setComments((prev) => ({
-        ...prev,
-        [data.postId]: [...(prev[data.postId] || []), data],
-      }))
-      setShowAddCommentDialog(false)
-      setNewComment({ body: '', postId: null, userId: 1 })
-    } catch (error) {
-      console.error('댓글 추가 오류:', error)
-    }
-  }
+  // const addComment = async () => {
+  //   try {
+  //     const response = await fetch('/api/comments/add', {
+  //       method: 'POST',
+  //       headers: { 'Content-Type': 'application/json' },
+  //       body: JSON.stringify(newComment),
+  //     })
+  //     const data = await response.json()
+  //     setComments((prev) => ({
+  //       ...prev,
+  //       [data.postId]: [...(prev[data.postId] || []), data],
+  //     }))
+  //     setShowAddCommentDialog(false)
+  //     setNewComment({ body: '', postId: null, userId: 1 })
+  //   } catch (error) {
+  //     console.error('댓글 추가 오류:', error)
+  //   }
+  // }
+  const addComment = useAddComment(
+    newComment,
+    setNewComment,
+    setComments,
+    setShowAddCommentDialog
+  )
 
   // 댓글 업데이트
   const updateComment = async () => {

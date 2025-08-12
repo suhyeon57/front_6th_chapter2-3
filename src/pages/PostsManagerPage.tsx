@@ -34,9 +34,10 @@ import {
   useLikeComment,
   useDeleteComment,
   useAddComment,
+  useUpdateComment,
 } from '@/features/comment/'
 
-import { NewComment } from '@/entities/comment/model/types'
+import { NewComment, selectedCommentType } from '@/entities/comment/model/types'
 
 const PostsManager = () => {
   const navigate = useNavigate()
@@ -63,7 +64,12 @@ const PostsManager = () => {
   const [tags, setTags] = useState([])
   const [selectedTag, setSelectedTag] = useState(queryParams.get('tag') || '')
   const [comments, setComments] = useState({})
-  const [selectedComment, setSelectedComment] = useState(null)
+  const [selectedComment, setSelectedComment] = useState<selectedCommentType>({
+    id: '',
+    body: '',
+    postId: null,
+    userId: null,
+  })
   const [newComment, setNewComment] = useState<NewComment>({
     body: '',
     postId: null,
@@ -240,25 +246,11 @@ const PostsManager = () => {
   )
 
   // 댓글 업데이트
-  const updateComment = async () => {
-    try {
-      const response = await fetch(`/api/comments/${selectedComment.id}`, {
-        method: 'PUT',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ body: selectedComment.body }),
-      })
-      const data = await response.json()
-      setComments((prev) => ({
-        ...prev,
-        [data.postId]: prev[data.postId].map((comment) =>
-          comment.id === data.id ? data : comment
-        ),
-      }))
-      setShowEditCommentDialog(false)
-    } catch (error) {
-      console.error('댓글 업데이트 오류:', error)
-    }
-  }
+  const updateComment = useUpdateComment(
+    selectedComment,
+    setComments,
+    setShowEditCommentDialog
+  )
 
   // 댓글 삭제
   const deleteComment = useDeleteComment(comments, setComments)

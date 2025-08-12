@@ -35,9 +35,14 @@ import {
   useDeleteComment,
   useAddComment,
   useUpdateComment,
+  useFetchComment,
 } from '@/features/comment/'
 
-import { NewComment, selectedCommentType } from '@/entities/comment/model/types'
+import {
+  NewComment,
+  selectedCommentType,
+  CommentsByPost,
+} from '@/entities/comment/model/types'
 
 const PostsManager = () => {
   const navigate = useNavigate()
@@ -63,7 +68,7 @@ const PostsManager = () => {
   const [loading, setLoading] = useState(false)
   const [tags, setTags] = useState([])
   const [selectedTag, setSelectedTag] = useState(queryParams.get('tag') || '')
-  const [comments, setComments] = useState({})
+  const [comments, setComments] = useState<CommentsByPost>({})
   const [selectedComment, setSelectedComment] = useState<selectedCommentType>({
     id: '',
     body: '',
@@ -226,16 +231,7 @@ const PostsManager = () => {
   }
 
   // 댓글 가져오기
-  const fetchComments = async (postId) => {
-    if (comments[postId]) return // 이미 불러온 댓글이 있으면 다시 불러오지 않음
-    try {
-      const response = await fetch(`/api/comments/post/${postId}`)
-      const data = await response.json()
-      setComments((prev) => ({ ...prev, [postId]: data.comments }))
-    } catch (error) {
-      console.error('댓글 가져오기 오류:', error)
-    }
-  }
+  const fetchComments = useFetchComment(setComments, comments)
 
   // 댓글 추가
   const addComment = useAddComment(

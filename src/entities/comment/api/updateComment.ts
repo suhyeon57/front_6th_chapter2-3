@@ -1,4 +1,8 @@
-export const updateCommentApi = async (selectedComment) => {
+import { selectedCommentType } from '../model/types'
+
+export const updateCommentApi = async (
+  selectedComment: selectedCommentType
+) => {
   try {
     const response = await fetch(`/api/comments/${selectedComment.id}`, {
       method: 'PUT',

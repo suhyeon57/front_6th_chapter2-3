@@ -30,7 +30,7 @@ import {
   TableRow,
 } from '@/shared/ui'
 
-import { useLikeComment } from '@/features/comment/'
+import { useLikeComment, useDeleteComment } from '@/features/comment/'
 
 const PostsManager = () => {
   const navigate = useNavigate()
@@ -267,19 +267,7 @@ const PostsManager = () => {
   }
 
   // 댓글 삭제
-  const deleteComment = async (id, postId) => {
-    try {
-      await fetch(`/api/comments/${id}`, {
-        method: 'DELETE',
-      })
-      setComments((prev) => ({
-        ...prev,
-        [postId]: prev[postId].filter((comment) => comment.id !== id),
-      }))
-    } catch (error) {
-      console.error('댓글 삭제 오류:', error)
-    }
-  }
+  const deleteComment = useDeleteComment(comments, setComments)
 
   // 댓글 좋아요
   const likeComment = useLikeComment(comments, setComments)

@@ -14,9 +14,7 @@ export const useFetchPosts = (
     setLoading(true)
     try {
       const postsData = await fetchPostsApi(limit, skip)
-      console.log('Fetched posts:', postsData)
       const usersData = await fetchUsersApi()
-      console.log('Fetched users:', usersData)
       const postsWithUsers = postsData.posts.map((post: Post) => ({
         ...post,
         author: usersData.users.find((user: User) => user.id === post.userId),

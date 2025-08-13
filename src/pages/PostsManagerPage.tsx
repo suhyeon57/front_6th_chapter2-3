@@ -43,7 +43,12 @@ import {
 } from '@/entities/comment/model/types'
 import { CommentRenderUI } from '@/features/comment/ui/CommentRenderUI'
 import { highlightText } from '@/shared/utils/highlightText'
-import { useSearchPosts, useAddPosts, useFetchPosts } from '@/features/post'
+import {
+  useSearchPosts,
+  useAddPosts,
+  useFetchPosts,
+  useDeletePosts,
+} from '@/features/post'
 
 const PostsManager = () => {
   const navigate = useNavigate()
@@ -172,16 +177,17 @@ const PostsManager = () => {
   }
 
   // 게시물 삭제
-  const deletePost = async (id) => {
-    try {
-      await fetch(`/api/posts/${id}`, {
-        method: 'DELETE',
-      })
-      setPosts(posts.filter((post) => post.id !== id))
-    } catch (error) {
-      console.error('게시물 삭제 오류:', error)
-    }
-  }
+  // const deletePost = async (id) => {
+  //   try {
+  //     await fetch(`/api/posts/${id}`, {
+  //       method: 'DELETE',
+  //     })
+  //     setPosts(posts.filter((post) => post.id !== id))
+  //   } catch (error) {
+  //     console.error('게시물 삭제 오류:', error)
+  //   }
+  // }
+  const deletePost = useDeletePosts(posts, setPosts)
 
   // 댓글 가져오기
   const fetchComments = useFetchComment(setComments, comments)

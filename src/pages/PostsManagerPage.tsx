@@ -5,7 +5,6 @@ import { SearchFilterBar } from '@/widgets/search-filter-bar'
 import {
   Pagination,
   Button,
-  Textarea,
   Card,
   CardContent,
   CardHeader,
@@ -27,7 +26,11 @@ import {
   selectedCommentType,
   CommentsByPost,
 } from '@/entities/comment/model/types'
-import { CommentRenderUI } from '@/features/comment/ui/CommentRenderUI'
+import {
+  CommentRenderUI,
+  AddCommentDialog,
+  UpdateCommentDialog,
+} from '@/features/comment/'
 import { highlightText } from '@/shared/utils/highlightText'
 import {
   useSearchPosts,
@@ -35,14 +38,11 @@ import {
   useFetchPosts,
   useDeletePosts,
   useUpdatePosts,
-} from '@/features/post'
-
-import {
   PostRenderUi,
   AddPostDialog,
   UpdatePostDialog,
   DetailPostDialog,
-} from '@/features/post/'
+} from '@/features/post'
 
 const PostsManager = () => {
   const navigate = useNavigate()
@@ -309,54 +309,22 @@ const PostsManager = () => {
       />
 
       {/* 댓글 추가 대화상자 */}
-      <Dialog
-        open={showAddCommentDialog}
+      <AddCommentDialog
+        showAddCommentDialog={showAddCommentDialog}
         onOpenChange={setShowAddCommentDialog}
-      >
-        <DialogContent>
-          <DialogHeader>
-            <DialogTitle>새 댓글 추가</DialogTitle>
-          </DialogHeader>
-          <div className='space-y-4'>
-            <Textarea
-              placeholder='댓글 내용'
-              value={newComment.body}
-              onChange={(e) =>
-                setNewComment({ ...newComment, body: e.target.value })
-              }
-            />
-            <Button onClick={addComment}>댓글 추가</Button>
-          </div>
-        </DialogContent>
-      </Dialog>
+        newComment={newComment}
+        setNewComment={setNewComment}
+        addComment={addComment}
+      />
 
       {/* 댓글 수정 대화상자 */}
-      <Dialog
-        open={showEditCommentDialog}
+      <UpdateCommentDialog
+        showEditCommentDialog={showEditCommentDialog}
         onOpenChange={setShowEditCommentDialog}
-      >
-        <DialogContent>
-          <DialogHeader>
-            <DialogTitle>댓글 수정</DialogTitle>
-          </DialogHeader>
-          <div className='space-y-4'>
-            <Textarea
-              placeholder='댓글 내용'
-              value={selectedComment?.body || ''}
-              onChange={(e) =>
-                setSelectedComment({ ...selectedComment, body: e.target.value })
-              }
-            />
-            <Button
-              onClick={() => {
-                if (selectedComment) updateComment(selectedComment)
-              }}
-            >
-              댓글 업데이트
-            </Button>
-          </div>
-        </DialogContent>
-      </Dialog>
+        selectedComment={selectedComment}
+        setSelectedComment={setSelectedComment}
+        updateComment={updateComment}
+      />
 
       {/* 게시물 상세 보기 대화상자 */}
       <DetailPostDialog
@@ -377,8 +345,6 @@ const PostsManager = () => {
           deleteComment={deleteComment}
         />
       </DetailPostDialog>
-
-      {/* 사용자 정보 모달 */}
 
       {/* 사용자 모달 */}
       <Dialog open={showUserModal} onOpenChange={setShowUserModal}>

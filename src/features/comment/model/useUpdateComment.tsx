@@ -8,6 +8,7 @@ export const useUpdateComment = (
 ) => {
   return async (selectedComment: selectedCommentType) => {
     try {
+      console.log('Updating comment:', selectedComment)
       const data = await updateCommentApi(selectedComment)
       setComments((prev) => ({
         ...prev,

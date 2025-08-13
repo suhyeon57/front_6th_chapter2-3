@@ -17,8 +17,8 @@ interface CommentRenderUIProps {
   setSelectedComment: React.Dispatch<
     React.SetStateAction<selectedCommentType | null>
   >
-  likeComment: (commentId: string, postId: string) => void
-  deleteComment: (commentId: string, postId: string) => void
+  likeComment: (commentId: Number, postId: string) => void
+  deleteComment: (commentId: Number, postId: string) => void
 }
 
 export const CommentRenderUI = ({
@@ -48,7 +48,7 @@ export const CommentRenderUI = ({
         </Button>
       </div>
       <div className='space-y-1'>
-        {comments[postId]?.map((comment) => (
+        {comments[postId]?.map((comment: Comment) => (
           <div
             key={comment.id}
             className='flex items-center justify-between text-sm border-b pb-1'

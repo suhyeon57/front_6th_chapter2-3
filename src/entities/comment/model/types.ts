@@ -6,6 +6,8 @@ export interface Comment {
   likes: number
   user: {
     username: string
+    id: number
+    fullName: string
   }
 }
 

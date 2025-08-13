@@ -1,4 +1,4 @@
-export const deleteCommentApi = async (id: string) => {
+export const deleteCommentApi = async (id: Number) => {
   try {
     const response = await fetch(`/api/comments/${id}`, {
       method: 'DELETE',

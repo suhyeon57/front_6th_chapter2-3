@@ -4,7 +4,7 @@ export const useDeleteComment = (
   comments: CommentsByPost,
   setComments: React.Dispatch<React.SetStateAction<CommentsByPost>>
 ) => {
-  return async (id: string, postId: string) => {
+  return async (id: Number, postId: string) => {
     try {
       await deleteCommentApi(id)
       setComments((prev) => ({

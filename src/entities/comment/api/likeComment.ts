@@ -1,4 +1,4 @@
-export const likeCommentApi = async (id: string, likes: number) => {
+export const likeCommentApi = async (id: Number, likes: number) => {
   try {
     const response = await fetch(`/api/comments/${id}`, {
       method: 'PATCH',

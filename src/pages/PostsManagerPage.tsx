@@ -1,14 +1,10 @@
 import { useEffect, useState } from 'react'
-import { Plus } from 'lucide-react'
 import { useLocation, useNavigate } from 'react-router-dom'
-import { SearchFilterBar } from '@/widgets/search-filter-bar'
+import { SearchFilterBar, PostHeader } from '@/widgets'
 import {
   Pagination,
-  Button,
   Card,
   CardContent,
-  CardHeader,
-  CardTitle,
   Dialog,
   DialogContent,
   DialogHeader,
@@ -43,6 +39,9 @@ import {
   UpdatePostDialog,
   DetailPostDialog,
 } from '@/features/post'
+
+import { useOpenUser } from '@/features/user'
+import { User } from '@/entities/user/model/types'
 
 const PostsManager = () => {
   const navigate = useNavigate()
@@ -80,8 +79,7 @@ const PostsManager = () => {
   const [showEditCommentDialog, setShowEditCommentDialog] = useState(false)
   const [showPostDetailDialog, setShowPostDetailDialog] = useState(false)
   const [showUserModal, setShowUserModal] = useState(false)
-  const [selectedUser, setSelectedUser] = useState(null)
-
+  const [selectedUser, setSelectedUser] = useState<User | null>(null)
   // URL 업데이트 함수
   const updateURL = () => {
     const params = new URLSearchParams()
@@ -193,16 +191,7 @@ const PostsManager = () => {
   }
 
   // 사용자 모달 열기
-  const openUserModal = async (user) => {
-    try {
-      const response = await fetch(`/api/users/${user.id}`)
-      const userData = await response.json()
-      setSelectedUser(userData)
-      setShowUserModal(true)
-    } catch (error) {
-      console.error('사용자 정보 가져오기 오류:', error)
-    }
-  }
+  const openUserModal = useOpenUser(setSelectedUser, setShowUserModal)
 
   useEffect(() => {
     fetchTags()
@@ -235,15 +224,7 @@ const PostsManager = () => {
 
   return (
     <Card className='w-full max-w-6xl mx-auto'>
-      <CardHeader>
-        <CardTitle className='flex items-center justify-between'>
-          <span>게시물 관리자</span>
-          <Button onClick={() => setShowAddDialog(true)}>
-            <Plus className='w-4 h-4 mr-2' />
-            게시물 추가
-          </Button>
-        </CardTitle>
-      </CardHeader>
+      <PostHeader onShowAddDialog={setShowAddDialog} />
       <CardContent>
         <div className='flex flex-col gap-4'>
           {/* 검색 및 필터 컨트롤 */}

@@ -8,6 +8,11 @@ export interface Post {
     dislikes: number
   }
   userId: number
+  author: {
+    id: number
+    username: string
+    image: string
+  }
 }
 
 export interface SelectedPost {}

@@ -12,6 +12,7 @@ export const useAddPosts = (
       const data = await addPostsApi(newPost)
 
       setPosts([data, ...posts])
+      console.log('게시물 추가 성공:', posts)
       setShowAddDialog(false)
       setNewPost({ title: '', body: '', userId: 1 })
     } catch (error) {

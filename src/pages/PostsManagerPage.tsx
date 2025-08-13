@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react'
+import { use, useEffect, useState } from 'react'
 import {
   Edit2,
   MessageSquare,
@@ -43,16 +43,16 @@ import {
   selectedCommentType,
   CommentsByPost,
 } from '@/entities/comment/model/types'
-import { CommentRenderUI } from '@/features/ui/CommentRenderUI'
+import { CommentRenderUI } from '@/features/comment/ui/CommentRenderUI'
 import { highlightText } from '@/shared/utils/highlightText'
-
+import { useSearchPosts } from '@/features/post'
 const PostsManager = () => {
   const navigate = useNavigate()
   const location = useLocation()
   const queryParams = new URLSearchParams(location.search)
 
   // 상태 관리
-  const [posts, setPosts] = useState([])
+  const [posts, setPosts] = useState<any[]>([])
   const [total, setTotal] = useState(0)
   const [skip, setSkip] = useState(parseInt(queryParams.get('skip') || '0'))
   const [limit, setLimit] = useState(parseInt(queryParams.get('limit') || '10'))
@@ -142,22 +142,13 @@ const PostsManager = () => {
   }
 
   // 게시물 검색
-  const searchPosts = async () => {
-    if (!searchQuery) {
-      fetchPosts()
-      return
-    }
-    setLoading(true)
-    try {
-      const response = await fetch(`/api/posts/search?q=${searchQuery}`)
-      const data = await response.json()
-      setPosts(data.posts)
-      setTotal(data.total)
-    } catch (error) {
-      console.error('게시물 검색 오류:', error)
-    }
-    setLoading(false)
-  }
+  const searchPosts = useSearchPosts(
+    searchQuery,
+    setPosts,
+    setTotal,
+    setLoading,
+    fetchPosts
+  )
 
   // 태그별 게시물 가져오기
   const fetchPostsByTag = async (tag) => {
@@ -561,7 +552,6 @@ const PostsManager = () => {
           </DialogHeader>
           <div className='space-y-4'>
             <p>{highlightText(selectedPost?.body, searchQuery)}</p>
-            {/* {renderComments(selectedPost?.id)} */}
             <CommentRenderUI
               postId={selectedPost?.id}
               comments={comments}

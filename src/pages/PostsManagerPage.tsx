@@ -48,6 +48,7 @@ import {
   useAddPosts,
   useFetchPosts,
   useDeletePosts,
+  useUpdatePosts,
 } from '@/features/post'
 
 const PostsManager = () => {
@@ -161,32 +162,14 @@ const PostsManager = () => {
   )
 
   // 게시물 업데이트
-  const updatePost = async () => {
-    try {
-      const response = await fetch(`/api/posts/${selectedPost.id}`, {
-        method: 'PUT',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify(selectedPost),
-      })
-      const data = await response.json()
-      setPosts(posts.map((post) => (post.id === data.id ? data : post)))
-      setShowEditDialog(false)
-    } catch (error) {
-      console.error('게시물 업데이트 오류:', error)
-    }
-  }
+  const updatePost = useUpdatePosts(
+    selectedPost,
+    posts,
+    setPosts,
+    setShowEditDialog
+  )
 
   // 게시물 삭제
-  // const deletePost = async (id) => {
-  //   try {
-  //     await fetch(`/api/posts/${id}`, {
-  //       method: 'DELETE',
-  //     })
-  //     setPosts(posts.filter((post) => post.id !== id))
-  //   } catch (error) {
-  //     console.error('게시물 삭제 오류:', error)
-  //   }
-  // }
   const deletePost = useDeletePosts(posts, setPosts)
 
   // 댓글 가져오기

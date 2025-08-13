@@ -9,3 +9,5 @@ export interface Post {
   }
   userId: number
 }
+
+export interface SelectedPost {}

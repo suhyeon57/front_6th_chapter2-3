@@ -5,7 +5,6 @@ import { SearchFilterBar } from '@/widgets/search-filter-bar'
 import {
   Pagination,
   Button,
-  Input,
   Textarea,
   Card,
   CardContent,
@@ -38,7 +37,12 @@ import {
   useUpdatePosts,
 } from '@/features/post'
 
-import { PostRenderUi } from '@/features/post/ui/PostRenderUi'
+import {
+  PostRenderUi,
+  AddPostDialog,
+  UpdatePostDialog,
+  DetailPostDialog,
+} from '@/features/post/'
 
 const PostsManager = () => {
   const navigate = useNavigate()
@@ -287,64 +291,22 @@ const PostsManager = () => {
       </CardContent>
 
       {/* 게시물 추가 대화상자 */}
-      <Dialog open={showAddDialog} onOpenChange={setShowAddDialog}>
-        <DialogContent>
-          <DialogHeader>
-            <DialogTitle>새 게시물 추가</DialogTitle>
-          </DialogHeader>
-          <div className='space-y-4'>
-            <Input
-              placeholder='제목'
-              value={newPost.title}
-              onChange={(e) =>
-                setNewPost({ ...newPost, title: e.target.value })
-              }
-            />
-            <Textarea
-              rows={30}
-              placeholder='내용'
-              value={newPost.body}
-              onChange={(e) => setNewPost({ ...newPost, body: e.target.value })}
-            />
-            <Input
-              type='number'
-              placeholder='사용자 ID'
-              value={newPost.userId}
-              onChange={(e) =>
-                setNewPost({ ...newPost, userId: Number(e.target.value) })
-              }
-            />
-            <Button onClick={addPost}>게시물 추가</Button>
-          </div>
-        </DialogContent>
-      </Dialog>
+      <AddPostDialog
+        showAddDialog={showAddDialog}
+        onOpenChange={setShowAddDialog}
+        newPost={newPost}
+        setNewPost={setNewPost}
+        addPost={addPost}
+      />
 
       {/* 게시물 수정 대화상자 */}
-      <Dialog open={showEditDialog} onOpenChange={setShowEditDialog}>
-        <DialogContent>
-          <DialogHeader>
-            <DialogTitle>게시물 수정</DialogTitle>
-          </DialogHeader>
-          <div className='space-y-4'>
-            <Input
-              placeholder='제목'
-              value={selectedPost?.title || ''}
-              onChange={(e) =>
-                setSelectedPost({ ...selectedPost, title: e.target.value })
-              }
-            />
-            <Textarea
-              rows={15}
-              placeholder='내용'
-              value={selectedPost?.body || ''}
-              onChange={(e) =>
-                setSelectedPost({ ...selectedPost, body: e.target.value })
-              }
-            />
-            <Button onClick={updatePost}>게시물 업데이트</Button>
-          </div>
-        </DialogContent>
-      </Dialog>
+      <UpdatePostDialog
+        showEditDialog={showEditDialog}
+        onOpenChange={setShowEditDialog}
+        selectedPost={selectedPost}
+        setSelectedPost={setSelectedPost}
+        updatePost={updatePost}
+      />
 
       {/* 댓글 추가 대화상자 */}
       <Dialog
@@ -397,32 +359,26 @@ const PostsManager = () => {
       </Dialog>
 
       {/* 게시물 상세 보기 대화상자 */}
-      <Dialog
-        open={showPostDetailDialog}
+      <DetailPostDialog
+        showPostDetailDialog={showPostDetailDialog}
         onOpenChange={setShowPostDetailDialog}
+        selectedPost={selectedPost}
+        searchQuery={searchQuery}
       >
-        <DialogContent className='max-w-3xl'>
-          <DialogHeader>
-            <DialogTitle>
-              {highlightText(selectedPost?.title, searchQuery)}
-            </DialogTitle>
-          </DialogHeader>
-          <div className='space-y-4'>
-            <p>{highlightText(selectedPost?.body, searchQuery)}</p>
-            <CommentRenderUI
-              postId={selectedPost?.id}
-              comments={comments}
-              searchQuery={searchQuery}
-              setNewComment={setNewComment}
-              setShowAddCommentDialog={setShowAddCommentDialog}
-              setSelectedComment={setSelectedComment}
-              setShowEditCommentDialog={setShowEditCommentDialog}
-              likeComment={likeComment}
-              deleteComment={deleteComment}
-            />
-          </div>
-        </DialogContent>
-      </Dialog>
+        <CommentRenderUI
+          postId={selectedPost?.id}
+          comments={comments}
+          searchQuery={searchQuery}
+          setNewComment={setNewComment}
+          setShowAddCommentDialog={setShowAddCommentDialog}
+          setSelectedComment={setSelectedComment}
+          setShowEditCommentDialog={setShowEditCommentDialog}
+          likeComment={likeComment}
+          deleteComment={deleteComment}
+        />
+      </DetailPostDialog>
+
+      {/* 사용자 정보 모달 */}
 
       {/* 사용자 모달 */}
       <Dialog open={showUserModal} onOpenChange={setShowUserModal}>

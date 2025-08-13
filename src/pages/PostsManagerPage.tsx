@@ -104,36 +104,36 @@ const PostsManager = () => {
     setPosts,
     setTotal,
     setLoading,
-    fetchPosts
+    fetchPosts,
+    selectedTag // tag가 undefined거나 'all'이면 전체, 아니면 태그별
   )
 
-  // 태그별 게시물 가져오기
-  const fetchPostsByTag = async (tag) => {
-    if (!tag || tag === 'all') {
-      fetchPosts()
-      return
-    }
-    setLoading(true)
-    try {
-      const [postsResponse, usersResponse] = await Promise.all([
-        fetch(`/api/posts/tag/${tag}`),
-        fetch('/api/users?limit=0&select=username,image'),
-      ])
-      const postsData = await postsResponse.json()
-      const usersData = await usersResponse.json()
+  // const fetchPostsByTag = async (tag) => {
+  //   if (!tag || tag === 'all') {
+  //     fetchPosts()
+  //     return
+  //   }
+  //   setLoading(true)
+  //   try {
+  //     const [postsResponse, usersResponse] = await Promise.all([
+  //       fetch(`/api/posts/tag/${tag}`),
+  //       fetch('/api/users?limit=0&select=username,image'),
+  //     ])
+  //     const postsData = await postsResponse.json()
+  //     const usersData = await usersResponse.json()
 
-      const postsWithUsers = postsData.posts.map((post) => ({
-        ...post,
-        author: usersData.users.find((user) => user.id === post.userId),
-      }))
+  //     const postsWithUsers = postsData.posts.map((post) => ({
+  //       ...post,
+  //       author: usersData.users.find((user) => user.id === post.userId),
+  //     }))
 
-      setPosts(postsWithUsers)
-      setTotal(postsData.total)
-    } catch (error) {
-      console.error('태그별 게시물 가져오기 오류:', error)
-    }
-    setLoading(false)
-  }
+  //     setPosts(postsWithUsers)
+  //     setTotal(postsData.total)
+  //   } catch (error) {
+  //     console.error('태그별 게시물 가져오기 오류:', error)
+  //   }
+  //   setLoading(false)
+  // }
 
   // 게시물 추가
   const addPost = useAddPosts(
@@ -190,11 +190,7 @@ const PostsManager = () => {
   }, [])
 
   useEffect(() => {
-    if (selectedTag) {
-      fetchPostsByTag(selectedTag)
-    } else {
-      fetchPosts()
-    }
+    fetchPosts(selectedTag)
     updateURL()
   }, [skip, limit, sortBy, sortOrder, selectedTag])
 
@@ -210,7 +206,7 @@ const PostsManager = () => {
 
   const handleTagChange = (value: string) => {
     setSelectedTag(value)
-    fetchPostsByTag(value)
+    fetchPosts(value)
     updateURL()
   }
 

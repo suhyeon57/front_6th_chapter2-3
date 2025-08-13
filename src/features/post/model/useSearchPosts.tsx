@@ -5,11 +5,12 @@ export const useSearchPosts = (
   setPosts: React.Dispatch<React.SetStateAction<any[]>>,
   setTotal: React.Dispatch<React.SetStateAction<number>>,
   setLoading: React.Dispatch<React.SetStateAction<boolean>>,
-  fetchPosts: () => void
+  fetchPosts: (tag?: string) => Promise<void>, // 통합된 fetchPosts
+  selectedTag?: string
 ) => {
   return async () => {
     if (!searchQuery) {
-      fetchPosts()
+      fetchPosts(selectedTag)
       return
     }
     setLoading(true)

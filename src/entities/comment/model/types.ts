@@ -1,6 +1,8 @@
 export interface Comment {
-  id: string // 반드시 있어야 함
+  id: number
   body: string
+  postId: number
+  userId: number
   likes: number
   user: {
     username: string
@@ -18,10 +20,13 @@ export interface NewComment {
 }
 
 export interface selectedCommentType {
-  id: string // 반드시 있어야 함
+  id: number
   body: string
+  postId: number
   likes: number
   user: {
+    id: number
     username: string
+    fullName: string
   }
 }

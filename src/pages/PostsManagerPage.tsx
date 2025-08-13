@@ -45,7 +45,7 @@ import {
 } from '@/entities/comment/model/types'
 import { CommentRenderUI } from '@/features/comment/ui/CommentRenderUI'
 import { highlightText } from '@/shared/utils/highlightText'
-import { useSearchPosts } from '@/features/post'
+import { useSearchPosts, useAddPosts } from '@/features/post'
 const PostsManager = () => {
   const navigate = useNavigate()
   const location = useLocation()
@@ -71,12 +71,8 @@ const PostsManager = () => {
   const [tags, setTags] = useState([])
   const [selectedTag, setSelectedTag] = useState(queryParams.get('tag') || '')
   const [comments, setComments] = useState<CommentsByPost>({})
-  const [selectedComment, setSelectedComment] = useState<selectedCommentType>({
-    id: '',
-    body: '',
-    postId: null,
-    userId: null,
-  })
+  const [selectedComment, setSelectedComment] =
+    useState<selectedCommentType | null>(null)
   const [newComment, setNewComment] = useState<NewComment>({
     body: '',
     postId: null,
@@ -179,21 +175,13 @@ const PostsManager = () => {
   }
 
   // 게시물 추가
-  const addPost = async () => {
-    try {
-      const response = await fetch('/api/posts/add', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify(newPost),
-      })
-      const data = await response.json()
-      setPosts([data, ...posts])
-      setShowAddDialog(false)
-      setNewPost({ title: '', body: '', userId: 1 })
-    } catch (error) {
-      console.error('게시물 추가 오류:', error)
-    }
-  }
+  const addPost = useAddPosts(
+    posts,
+    setPosts,
+    setShowAddDialog,
+    newPost,
+    setNewPost
+  )
 
   // 게시물 업데이트
   const updatePost = async () => {
@@ -235,11 +223,7 @@ const PostsManager = () => {
   )
 
   // 댓글 업데이트
-  const updateComment = useUpdateComment(
-    selectedComment,
-    setComments,
-    setShowEditCommentDialog
-  )
+  const updateComment = useUpdateComment(setComments, setShowEditCommentDialog)
 
   // 댓글 삭제
   const deleteComment = useDeleteComment(comments, setComments)
@@ -534,7 +518,13 @@ const PostsManager = () => {
                 setSelectedComment({ ...selectedComment, body: e.target.value })
               }
             />
-            <Button onClick={updateComment}>댓글 업데이트</Button>
+            <Button
+              onClick={() => {
+                if (selectedComment) updateComment(selectedComment)
+              }}
+            >
+              댓글 업데이트
+            </Button>
           </div>
         </DialogContent>
       </Dialog>

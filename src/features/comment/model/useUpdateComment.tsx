@@ -3,11 +3,10 @@ import { CommentsByPost } from '@/entities/comment/model/types'
 import { selectedCommentType } from '@/entities/comment/model/types'
 
 export const useUpdateComment = (
-  selectedComment: selectedCommentType,
   setComments: React.Dispatch<React.SetStateAction<CommentsByPost>>,
   setShowEditCommentDialog: React.Dispatch<React.SetStateAction<boolean>>
 ) => {
-  return async () => {
+  return async (selectedComment: selectedCommentType) => {
     try {
       const data = await updateCommentApi(selectedComment)
       setComments((prev) => ({

@@ -1,4 +1,4 @@
-export const fetchCommentApi = async (postId: string) => {
+export const fetchCommentApi = async (postId: Number) => {
   try {
     const response = await fetch(`/api/comments/post/${postId}`)
     return await response.json()

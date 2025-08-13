@@ -4,7 +4,7 @@ export const useFetchComment = (
   setComments: React.Dispatch<React.SetStateAction<CommentsByPost>>,
   comments: CommentsByPost
 ) => {
-  return async (postId: string) => {
+  return async (postId: number) => {
     if (comments[postId]) return
     try {
       const data = await fetchCommentApi(postId)

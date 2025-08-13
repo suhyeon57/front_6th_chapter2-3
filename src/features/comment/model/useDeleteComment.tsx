@@ -1,10 +1,9 @@
 import { CommentsByPost } from '@/entities/comment/model/types'
 import { deleteCommentApi } from '@/entities/comment/api/deleteComment'
 export const useDeleteComment = (
-  comments: CommentsByPost,
   setComments: React.Dispatch<React.SetStateAction<CommentsByPost>>
 ) => {
-  return async (id: Number, postId: string) => {
+  return async (id: number, postId: number) => {
     try {
       await deleteCommentApi(id)
       setComments((prev) => ({

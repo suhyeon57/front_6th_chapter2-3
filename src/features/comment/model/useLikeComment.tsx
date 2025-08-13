@@ -6,7 +6,7 @@ export const useLikeComment = (
   comments: CommentsByPost,
   setComments: React.Dispatch<React.SetStateAction<CommentsByPost>>
 ) => {
-  return async (id: Number, postId: string) => {
+  return async (id: number, postId: number) => {
     try {
       const comment = comments[postId].find((c) => c.id === id)
       if (!comment) return

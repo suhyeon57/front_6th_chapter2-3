@@ -8,8 +8,8 @@ import {
 import { highlightText } from '@/shared/utils/highlightText'
 
 interface CommentRenderUIProps {
-  postId: string
-  comments: Record<string, Comment[]>
+  postId: number
+  comments: Record<number, Comment[]>
   searchQuery: string
   setNewComment: React.Dispatch<React.SetStateAction<NewComment>>
   setShowAddCommentDialog: React.Dispatch<React.SetStateAction<boolean>>
@@ -17,10 +17,9 @@ interface CommentRenderUIProps {
   setSelectedComment: React.Dispatch<
     React.SetStateAction<selectedCommentType | null>
   >
-  likeComment: (commentId: Number, postId: string) => void
-  deleteComment: (commentId: Number, postId: string) => void
+  likeComment: (commentId: number, postId: number) => void
+  deleteComment: (commentId: number, postId: number) => void
 }
-
 export const CommentRenderUI = ({
   postId,
   comments,

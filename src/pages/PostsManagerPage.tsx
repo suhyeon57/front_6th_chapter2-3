@@ -33,7 +33,8 @@ import {
 } from '@/features/post'
 
 import { useOpenUser, OpenUserModalDialog } from '@/features/user'
-import { User } from '@/entities/user/model/types'
+import { SelectedUser } from '@/entities/user/model/types'
+import { Post } from '@/entities/post/model/types'
 
 const PostsManager = () => {
   const navigate = useNavigate()
@@ -48,7 +49,7 @@ const PostsManager = () => {
   const [searchQuery, setSearchQuery] = useState(
     queryParams.get('search') || ''
   )
-  const [selectedPost, setSelectedPost] = useState(null)
+  const [selectedPost, setSelectedPost] = useState<Post | null>(null)
   const [sortBy, setSortBy] = useState(queryParams.get('sortBy') || '')
   const [sortOrder, setSortOrder] = useState(
     queryParams.get('sortOrder') || 'asc'
@@ -71,8 +72,7 @@ const PostsManager = () => {
   const [showEditCommentDialog, setShowEditCommentDialog] = useState(false)
   const [showPostDetailDialog, setShowPostDetailDialog] = useState(false)
   const [showUserModal, setShowUserModal] = useState(false)
-  const [selectedUser, setSelectedUser] = useState<User | null>(null)
-  // URL 업데이트 함수
+  const [selectedUser, setSelectedUser] = useState<SelectedUser | null>(null) // URL 업데이트 함수
   const updateURL = () => {
     const params = new URLSearchParams()
     if (skip) params.set('skip', skip.toString())
@@ -170,13 +170,13 @@ const PostsManager = () => {
   const updateComment = useUpdateComment(setComments, setShowEditCommentDialog)
 
   // 댓글 삭제
-  const deleteComment = useDeleteComment(comments, setComments)
+  const deleteComment = useDeleteComment(setComments)
 
   // 댓글 좋아요
   const likeComment = useLikeComment(comments, setComments)
 
   // 게시물 상세 보기
-  const openPostDetail = (post) => {
+  const openPostDetail = (post: Post) => {
     setSelectedPost(post)
     fetchComments(post.id)
     setShowPostDetailDialog(true)
@@ -303,7 +303,7 @@ const PostsManager = () => {
         searchQuery={searchQuery}
       >
         <CommentRenderUI
-          postId={selectedPost?.id}
+          postId={selectedPost?.id ?? 0} // 또는 postId={selectedPost ? selectedPost.id : 0}
           comments={comments}
           searchQuery={searchQuery}
           setNewComment={setNewComment}

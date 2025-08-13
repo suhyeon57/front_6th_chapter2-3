@@ -12,12 +12,12 @@ export interface Comment {
 }
 
 export type CommentsByPost = {
-  [postId: string]: Comment[]
+  [postId: number]: Comment[]
 }
 
 export interface NewComment {
   body: string
-  postId: string | null
+  postId: number | null
   userId: number
 }
 

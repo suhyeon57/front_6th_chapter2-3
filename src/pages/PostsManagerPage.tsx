@@ -30,6 +30,7 @@ import {
   AddPostDialog,
   UpdatePostDialog,
   DetailPostDialog,
+  useFetchTags,
 } from '@/features/post'
 
 import { useOpenUser, OpenUserModalDialog } from '@/features/user'
@@ -58,7 +59,7 @@ const PostsManager = () => {
   const [showEditDialog, setShowEditDialog] = useState(false)
   const [newPost, setNewPost] = useState({ title: '', body: '', userId: 1 })
   const [loading, setLoading] = useState(false)
-  const [tags, setTags] = useState([])
+  const [tags, setTags] = useState<string[]>([])
   const [selectedTag, setSelectedTag] = useState(queryParams.get('tag') || '')
   const [comments, setComments] = useState<CommentsByPost>({})
   const [selectedComment, setSelectedComment] =
@@ -88,15 +89,7 @@ const PostsManager = () => {
   const fetchPosts = useFetchPosts(limit, skip, setPosts, setTotal, setLoading)
 
   // 태그 가져오기
-  const fetchTags = async () => {
-    try {
-      const response = await fetch('/api/posts/tags')
-      const data = await response.json()
-      setTags(data)
-    } catch (error) {
-      console.error('태그 가져오기 오류:', error)
-    }
-  }
+  const fetchTags = useFetchTags(setTags)
 
   // 게시물 검색
   const searchPosts = useSearchPosts(

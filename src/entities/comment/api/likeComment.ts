@@ -1,6 +1,8 @@
+const API_BASE_URL = import.meta.env.PROD ? 'https://dummyjson.com' : '/api'
+
 export const likeCommentApi = async (id: Number, likes: number) => {
   try {
-    const response = await fetch(`/api/comments/${id}`, {
+    const response = await fetch(`${API_BASE_URL}/comments/${id}`, {
       method: 'PATCH',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({
